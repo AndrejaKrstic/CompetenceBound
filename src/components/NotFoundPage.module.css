@@ -1,0 +1,19 @@
+.container {
+  height: 100vh;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #333333;
+}
+
+.mainText {
+  margin-bottom: -50px;
+
+}
+
+.errorCode {
+  margin-top: 0;
+  font-size: 200px;
+}

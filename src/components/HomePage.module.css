@@ -1,0 +1,26 @@
+.buttonContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.blogButton,
+.compButton {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 15px;
+  border-width: 0px;
+  background-color: #f6dec0;
+  padding: 15px;
+  text-decoration: none;
+  color: black;
+  text-wrap: nowrap;
+  margin-top: 10px;
+}
+.blogButton:hover,
+.compButton:hover {
+  background-color: #a98251;
+  color: white;
+}
+
+.compButton {
+}

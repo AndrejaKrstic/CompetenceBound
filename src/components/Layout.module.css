@@ -1,0 +1,27 @@
+.layoutNavbar {
+  background-color: #ff7f00;
+}
+
+.layoutNavbar a:hover {
+  color: black !important;
+}
+
+.disconnectButton {
+  font-weight: bold;
+  border: none;
+  color: white;
+  background-color: transparent;
+  border-width: 2px;
+  border-radius: 15px;
+  padding: 5px 20px 5px 20px;
+}
+
+.disconnectButton:hover {
+  color: black;
+}
+
+.navbarTitle {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 30px;
+  color: white;
+}

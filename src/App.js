@@ -1,24 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useState } from "react";
+import LoginPage from "./components/LoginPage";
+import NotFoundPage from "./components/NotFoundPage";
+import HomePage from "./components/HomePage";
+import PrivateRoute from "./routes/PrivateRoute";
+import BlogPage from "./components/BlogPage";
+import CompetencesPage from "./components/CompetencesPage";
+import "./App.css";
+import { useAppContext } from "./AppContext";
 
 function App() {
+  const [userRole, setUserRole] = useState("user");
+  const { isAuthenticated } =
+  useAppContext();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/connect"
+          element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute
+              Component={HomePage}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/blog"
+          element={
+            <PrivateRoute
+              Component={BlogPage}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/competences"
+          element={
+            <PrivateRoute
+              Component={CompetencesPage}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Router>
   );
 }
 

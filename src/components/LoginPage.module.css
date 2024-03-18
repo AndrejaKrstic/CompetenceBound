@@ -1,0 +1,114 @@
+.container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.titleContainer {
+  display: flex;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .titleContainer {
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 20%;
+  }
+}
+
+@media (max-width: 767px) {
+  .titleContainer {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.appName {
+  font-family: "Bebas Neue", sans-serif;
+  color: black;
+  font-size: 70px;
+  display: grid;
+  place-items: center;
+  grid-template-areas: "text";
+  -webkit-background-clip: text;
+  margin: 0;
+
+  & > *,
+  &::after {
+    grid-area: text;
+  }
+
+  &::after {
+    content: attr(data-text);
+    color: var(--paper);
+    transform: translate(0.1em, 0.1em);
+    filter: drop-shadow(0.015em 0.015em 0.025em var(--shadow));
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(#ff8c00, #ff8c00);
+  }
+}
+
+.leftContent {
+  background-color: #333333;
+  margin-left: 0px;
+  margin-right: 0px;
+  height: 100%;
+}
+
+.leftRow {
+  padding-right: 0 !important;
+}
+
+.rightRow {
+  padding-left: 0 !important;
+}
+
+.rightContent {
+  margin-right: 0px;
+  margin-left: 0px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff8c004d;
+}
+
+.loginContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginText {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.loginText span {
+  font-weight: bold;
+}
+
+.loginButton {
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-right: 10px;
+  background-color: #ff8c00;
+  border: none;
+  border-radius: 15px;
+}
+
+.loginButton:hover {
+  background-color: #653a05;
+}
+
+.loginButton:active {
+  background-color: #653a05 !important;
+}
+
+.metamaskLogo {
+  width: 80px;
+}
