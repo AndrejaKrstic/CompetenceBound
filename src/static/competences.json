@@ -1,0 +1,42 @@
+[
+  {
+    "area": "Blockchain proficiency",
+    "name": "DApp Development",
+    "description": "Proficiency in developing decentralized applications (dApps) on blockchain platforms, incorporating smart contracts, user interfaces, and backend infrastructure. DApp development involves understanding the principles of decentralized computing, designing user-friendly interfaces, implementing efficient smart contracts, and deploying decentralized applications that interact seamlessly with blockchain networks.",
+    "elements": [
+      {
+        "name": "Smart Contract Development",
+        "description": "Proficiency in designing, coding, and deploying smart contracts on blockchain platforms, ensuring security, efficiency, and functionality."
+      },
+      {
+        "name": "User Interface (UI) Design",
+        "description": "Ability to design intuitive and user-friendly interfaces for decentralized applications, focusing on usability, accessibility, and user experience (UX) principles."
+      },
+      {
+        "name": "Backend Infrastructure Development",
+        "description": "Competence in developing and managing the backend infrastructure required for dApps, including databases, servers, and APIs, while adhering to decentralized architecture principles."
+      },
+      {
+        "name": "Blockchain Platform Proficiency",
+        "description": "Understanding of different blockchain platforms (e.g., Ethereum, Hyperledger, etc.) and their respective tools, languages, and development environments for dApp deployment."
+      },
+      {
+        "name": "Interoperability and Integration",
+        "description": "Knowledge of integrating various components of dApps, including smart contracts, frontend interfaces, and backend systems, to ensure seamless interaction within blockchain networks."
+      },
+      {
+        "name": "Testing and Debugging",
+        "description": "Ability to conduct thorough testing and debugging of dApps to ensure functionality, performance, and reliability, using tools such as automated testing frameworks and network simulators."
+      },
+      {
+        "name": "Deployment and Maintenance",
+        "description": "Skills in deploying dApps on blockchain networks, managing version control, and performing maintenance tasks such as updates, patches, and scaling to accommodate increasing user demand."
+      }
+    ],
+    "dispositions": [
+      "D-4",
+      "D-10",
+      "D-11"
+    ]
+  }
+]

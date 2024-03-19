@@ -11,8 +11,12 @@ function HomePage() {
         <div className="col text-start">
           <h3>Get Started</h3>
           <div className={`mt-3 ${style.buttonContainer}`}>
-            <a className={style.blogButton} href="/blog">Check out some blog posts</a>
-            <a className={style.compButton} href="/competences">Dive into competences</a>
+            <a className={style.blogButton} href="/blog">
+              Check out some blog posts
+            </a>
+            <a className={style.compButton} href="/competences">
+              Dive into competences
+            </a>
           </div>
         </div>
       </div>
