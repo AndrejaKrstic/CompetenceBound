@@ -8,12 +8,14 @@ function Layout({ children }) {
 
   useEffect(() => {
     addMetamaskListener(logInUser);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="main">
-      <nav className={`navbar navbar-expand-lg ${style.layoutNavbar}`}>
+      <nav
+        className={`navbar fixed-top navbar-expand-lg ${style.layoutNavbar}`}
+      >
         <div className={`container-fluid ${style.titleContainer}`}>
           <a
             className={`navbar-brand text-white fw-bold ${style.navbarTitle}`}
@@ -66,7 +68,7 @@ function Layout({ children }) {
           </button>
         </div>
       </nav>
-      {children}
+      <div style={{ paddingTop: "70px" }}>{children}</div>
     </div>
   );
 }
