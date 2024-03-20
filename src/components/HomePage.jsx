@@ -4,7 +4,7 @@ import style from "./HomePage.module.css";
 function HomePage() {
   return (
     <div className={`container mt-5 ${style.homePageContainer}`}>
-      <h1 className="text-start">Welcome to Name of the App</h1>
+      <h1 className="text-start">Welcome to <span className="madimi-one">CompetenceBound</span>!</h1>
       <p className="text-start mt-3">Description of the App: bla bla truc</p>
       <hr className="divider mt-5 mb-4" />
       <div className="row mt-5">

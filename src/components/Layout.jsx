@@ -12,9 +12,8 @@ function Layout({ children }) {
           <a
             className={`navbar-brand text-white fw-bold ${style.navbarTitle}`}
             href="/"
-            data-text="Name of the app"
           >
-            Name of the app
+            CompetenceBound
           </a>
           <button
             className="navbar-toggler"
@@ -30,8 +29,20 @@ function Layout({ children }) {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link text-white fw-bold" href="/competences" style={{}}>
+                <a
+                  className="nav-link text-white fw-bold"
+                  href="/competences"
+                  style={{}}
+                >
                   Competences
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link text-white fw-bold"
+                  href="/competency-model"
+                >
+                  Competency Model
                 </a>
               </li>
               <li className="nav-item">

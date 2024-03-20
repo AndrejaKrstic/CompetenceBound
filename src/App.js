@@ -13,6 +13,7 @@ import BlogPage from "./components/BlogPage";
 import CompetencesPage from "./components/CompetencesPage";
 import "./App.css";
 import { useAppContext } from "./AppContext";
+import CompetencyModelPage from "./components/CompetencyModelPage";
 
 function App() {
   const [userRole, setUserRole] = useState("user");
@@ -48,6 +49,15 @@ function App() {
           element={
             <PrivateRoute
               Component={CompetencesPage}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/competency-model"
+          element={
+            <PrivateRoute
+              Component={CompetencyModelPage}
               isAuthenticated={isAuthenticated}
             />
           }

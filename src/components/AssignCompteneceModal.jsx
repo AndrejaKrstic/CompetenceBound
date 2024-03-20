@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import comps from "../static/competences.json";
-import { assignCompetence } from "./AssignCompetenceController";
+import { assignCompetence } from "../controllers/AssignCompetenceController";
 
 function AssignCompteneceModal() {
   const [competences, setCompetences] = useState([]);

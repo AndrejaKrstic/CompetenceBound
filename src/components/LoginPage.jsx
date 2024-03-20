@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Web3 from 'web3';
+import Web3 from "web3";
 import style from "./LoginPage.module.css";
 import photo from "../images/MetaMask_Fox.svg.png";
 import { useAppContext } from "../AppContext";
 
-const sepoliaRPCUrl = "https://sepolia.infura.io/v3/22db25488a504c54b022c84cd9e9eca8";
+const sepoliaRPCUrl =
+  "https://sepolia.infura.io/v3/22db25488a504c54b022c84cd9e9eca8";
 
 const LoginPage = () => {
-  const {logInUser} = useAppContext();
+  const { logInUser } = useAppContext();
 
   const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(null);
@@ -15,11 +16,13 @@ const LoginPage = () => {
   const connectWallet = async () => {
     try {
       if (window.ethereum) {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
         setAccount(accounts[0]);
         console.log("Connected to Ethereum account: ", accounts[0]);
         logInUser(accounts[0]);
-        window.ethereum.on('accountsChanged', (newAccounts) => {
+        window.ethereum.on("accountsChanged", (newAccounts) => {
           setAccount(newAccounts[0]);
           console.log("Switched to account: ", newAccounts[0]);
         });
@@ -43,8 +46,8 @@ const LoginPage = () => {
         <div className={`col-md-7 ${style.leftRow}`}>
           <div className={style.leftContent}>
             <div className={style.titleContainer}>
-              <h1 className={style.appName} data-text="Name of the app">
-                <span>Name of the app</span>
+              <h1 className={style.appName} data-text="CompetenceBound">
+                <span>CompetenceBound</span>
               </h1>
             </div>
           </div>
