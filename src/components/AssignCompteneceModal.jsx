@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import comps from "../static/competences.json";
 import { assignCompetence } from "../controllers/AssignCompetenceController";
 
+const contractAddress = "0xC1d2b725a73be07c60ca0eCe6F6F9e2F8511F476";
+const sepoliaRPCUrl = "https://sepolia.infura.io/v3/e2d17050f550446dad42f6bab853f289";
+
 function AssignCompteneceModal() {
   const [competences, setCompetences] = useState([]);
   const [selectedComptenece, setSelectedCompetence] = useState();

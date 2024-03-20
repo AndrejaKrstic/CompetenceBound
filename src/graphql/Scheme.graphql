@@ -1,0 +1,12 @@
+type NFT {
+  id: ID!
+  tokenId: Int!
+  tokenURI: String!
+  owner: String!
+  competenceId: Int!
+  competenceLevel: Int!
+}
+
+type Query {
+  nfts(studentAddress: String, competenceName: String): [NFT!]!
+}

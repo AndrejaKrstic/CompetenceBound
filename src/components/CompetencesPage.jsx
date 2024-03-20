@@ -6,6 +6,8 @@ import { Tooltip } from "bootstrap";
 import style from "./CompetencesPage.module.css";
 import AssignCompteneceModal from "./AssignCompteneceModal";
 import { useAppContext } from "../AppContext";
+import { useQuery } from '@apollo/client';
+import { GET_NFTS } from '../graphql/Queries';
 
 function CompetencesPage() {
   const { isAdmin } = useAppContext();
@@ -17,6 +19,9 @@ function CompetencesPage() {
       (tooltipTriggerEl) => new Tooltip(tooltipTriggerEl)
     );
   }, []);
+
+  const { loading, error, data } = useQuery(GET_NFTS);
+  console.log(data);
 
   return (
     <div className="container mt-5">

@@ -18,7 +18,7 @@ contract SoulboundNFT is ERC721, ERC721URIStorage, Ownable {
     string[] public competencesName;
     mapping (uint256 => Competence) public competences;
 
-    event CompetenceAssigned(string tokenURI, uint256 tokenId, address studentAddress, string competenceName, uint8 competenceLevel); //tokenuri, student address
+    event CompetenceAssigned(string tokenURI, uint256 tokenId, address studentAddress, string competenceName, uint8 competenceLevel);
     event CompetenceAdded(string competenceName,  uint256 competenceId);
 
     constructor() ERC721("SoulboundNFT", "SBNFT") {}
@@ -49,8 +49,6 @@ contract SoulboundNFT is ERC721, ERC721URIStorage, Ownable {
     function getCurrentToken() public view returns (uint256) {
         return _tokenIdCounter.current();
     }
-
-     // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(address from, address to, uint256) pure override internal {
         require(from == address(0) || to == address(0), "This a Soulbound token. It cannot be transferred. It can only be burned by the token owner.");
