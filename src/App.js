@@ -4,7 +4,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useState } from "react";
 import LoginPage from "./components/LoginPage";
 import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
@@ -16,7 +15,6 @@ import { useAppContext } from "./AppContext";
 import CompetencyModelPage from "./components/CompetencyModelPage";
 
 function App() {
-  const [userRole, setUserRole] = useState("user");
   const { isAuthenticated } =
   useAppContext();
   return (

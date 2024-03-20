@@ -3,6 +3,7 @@ import Web3 from "web3";
 import style from "./LoginPage.module.css";
 import photo from "../images/MetaMask_Fox.svg.png";
 import { useAppContext } from "../AppContext";
+import { addMetamaskListener } from "../controllers/AddAccountListenersController";
 
 const sepoliaRPCUrl =
   "https://sepolia.infura.io/v3/22db25488a504c54b022c84cd9e9eca8";
@@ -22,10 +23,7 @@ const LoginPage = () => {
         setAccount(accounts[0]);
         console.log("Connected to Ethereum account: ", accounts[0]);
         logInUser(accounts[0]);
-        window.ethereum.on("accountsChanged", (newAccounts) => {
-          setAccount(newAccounts[0]);
-          console.log("Switched to account: ", newAccounts[0]);
-        });
+        setAccount(addMetamaskListener(logInUser))
       } else {
         console.log("MetaMask is not installed.");
       }

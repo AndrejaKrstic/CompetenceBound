@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./Layout.module.css";
 import { useAppContext } from "../AppContext";
+import { addMetamaskListener } from "../controllers/AddAccountListenersController";
 
 function Layout({ children }) {
-  const { logOutUser } = useAppContext();
+  const { logOutUser, logInUser } = useAppContext();
+
+  useEffect(() => {
+    addMetamaskListener(logInUser);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="main">

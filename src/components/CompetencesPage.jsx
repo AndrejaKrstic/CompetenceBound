@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import CompetenceCard from "./CompetenceCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "bootstrap";
 import style from "./CompetencesPage.module.css";
 import AssignCompteneceModal from "./AssignCompteneceModal";
+import { useAppContext } from "../AppContext";
 
-function CompetencesPage({ userType }) {
+function CompetencesPage() {
+  const { isAdmin } = useAppContext();
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll(
       '[data-bs-togglic="tooltip"]'
     );
-    const tooltipList = [...tooltipTriggerList].map(
+    [...tooltipTriggerList].map(
       (tooltipTriggerEl) => new Tooltip(tooltipTriggerEl)
     );
   }, []);
@@ -19,19 +21,20 @@ function CompetencesPage({ userType }) {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">Competences</h1>
-
-      <div className="d-flex justify-content-end mb-3">
-        <button
-          className={`btn btn-primary ${style.assignButton}`}
-          data-bs-toggle="modal"
-          data-bs-togglic="tooltip"
-          data-bs-target="#assignCompModal"
-          data-bs-placement="top"
-          data-bs-title="Assign a Competence"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
-      </div>
+      {isAdmin && (
+        <div className="d-flex justify-content-end mb-3">
+          <button
+            className={`btn btn-primary ${style.assignButton}`}
+            data-bs-toggle="modal"
+            data-bs-togglic="tooltip"
+            data-bs-target="#assignCompModal"
+            data-bs-placement="top"
+            data-bs-title="Assign a Competence"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
+      )}
 
       <div className="row">
         <CompetenceCard

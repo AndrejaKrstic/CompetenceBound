@@ -1,5 +1,5 @@
 import axios from "axios";
-const JWT = "";
+const JWT = process.env.REACT_APP_JWT;
 
 const uploadToIpfs = async (comp) => {
   const data = JSON.stringify({
