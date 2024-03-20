@@ -17,6 +17,9 @@ function HomePage() {
             <a className={style.compButton} href="/competences">
               Dive into competences
             </a>
+            <a className={style.compButton} href="/competency-model">
+              Check out the competency model!
+            </a>
           </div>
         </div>
       </div>
