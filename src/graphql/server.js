@@ -49,7 +49,9 @@ const resolvers = {
       for (let i = 0; i < totalTokens; i++) {
         const tokenURI = await contract.tokenURI(i);
         const owner = await contract.ownerOf(i);
-        const { competenceId, competenceLevel } = await contract.competences(i);
+        const competences = await contract.competences(i);
+        const competenceId = competences.competenceId.toNumber(); // Convert BigNumber to JavaScript number
+        const competenceLevel = competences.competenceLevel; // Use as is, it's already a regular number (uint8)
         const competenceNameForToken = await contract.competencesName(competenceId);
         
         // Check if the competence name or student address matches the provided criteria
@@ -78,7 +80,7 @@ const resolvers = {
         tokenId: event.args.tokenId.toNumber(),
         studentAddress: event.args.studentAddress,
         competenceName: event.args.competenceName,
-        competenceLevel: event.args.competenceLevel.toNumber(),
+        competenceLevel: event.args.competenceLevel,
       }));
     },
     competenceAddedEvents: async () => {
