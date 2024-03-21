@@ -39,6 +39,19 @@ export const GET_NFTS_BY_COMPETENCE_NAME = gql`
   }
 `;
 
+export const GET_NFTS_BY_COMPETENCE_AND_STUDENT = gql`
+  query GetNFTsByCompetenceAndStudent($competenceName: String!, $studentAddress: String!) {
+    nfts(competenceName: $competenceName, studentAddress: $studentAddress) {
+      id
+      tokenId
+      tokenURI
+      owner
+      competenceId
+      competenceLevel
+    }
+  }
+`;
+
 //probni query:
 export const GET_NFTS = gql`
   query {

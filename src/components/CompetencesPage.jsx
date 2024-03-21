@@ -5,14 +5,10 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "bootstrap";
 import style from "./CompetencesPage.module.css";
 import AssignCompteneceModal from "./AssignCompteneceModal";
+import NoCompetencesToShow from "./NoCompetencesToShow"
 import { useAppContext } from "../AppContext";
-import { useQuery, useApolloClient } from "@apollo/client";
-import {
-  GET_NFTS_BY_STUDENT_ADDRESS,
-  GET_NFTS_BY_COMPETENCE_NAME,
-  GET_ALL_NFTS,
-} from "../graphql/Queries";
-import NoCompetencesToShow from "./NoCompetencesToShow";
+import { useQuery, useApolloClient } from '@apollo/client';
+import { GET_NFTS_BY_STUDENT_ADDRESS, GET_NFTS_BY_COMPETENCE_NAME, GET_ALL_NFTS, GET_NFTS_BY_COMPETENCE_AND_STUDENT } from '../graphql/Queries';
 
 function CompetencesPage() {
   const { isAdmin } = useAppContext();
