@@ -11,14 +11,15 @@ const ContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("eth_account")
   );
-  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("is_admin"));
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("is_admin") === "true");
 
   const logInUser = (account) => {
     localStorage.setItem("eth_account", account);
     if (account === process.env.REACT_APP_ADMIN_ACCOUNT) {
-      localStorage.setItem("is_admin", true);
+      localStorage.setItem("is_admin", "true");
       setIsAdmin(true);
     } else {
+      localStorage.setItem("is_admin", "false");
       setIsAdmin(false);
     }
     setIsAuthenticated(true);

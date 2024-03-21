@@ -1,7 +1,6 @@
 import React from "react";
 import svgBloom from "../images/Blooms.svg";
 import svgDispositions from "../images/dispositions.svg";
-import CompetenceLevelImages from "./CompetenceLevelImages";
 
 import competences from "../static/competences.json";
 import CompetenceSection from "./CompetenceSection";
@@ -131,10 +130,9 @@ function CompetencyModelPage() {
                 Final level will be &#40;3 + 3 + 2 + 6&#41; / 4 <br />
                 Which is equal to 3.5, in this case this will be rounded to 4.
                 <br /> <br />
-                Each level gets a different award as shown below:
+                Each level gets a different award for a competence.
                 <br />
               </p>
-              <CompetenceLevelImages />
             </div>
           </div>
         </div>

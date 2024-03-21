@@ -1,4 +1,5 @@
 import React from "react";
+import CompetenceLevelImages from "./CompetenceLevelImages";
 
 const CompetenceSection = ({ comp }) => {
   const { area, name, description, elements, dispositions } = comp;
@@ -43,6 +44,10 @@ const CompetenceSection = ({ comp }) => {
             <li key={i}>{disposition}</li>
           ))}
         </ul>
+      </div>
+      <div className="competence-awards">
+        <h5>Awards for this competence:</h5>
+        <CompetenceLevelImages />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import CompetenceCard from "./CompetenceCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -6,12 +6,21 @@ import { Tooltip } from "bootstrap";
 import style from "./CompetencesPage.module.css";
 import AssignCompteneceModal from "./AssignCompteneceModal";
 import { useAppContext } from "../AppContext";
-import { useQuery } from '@apollo/client';
-import { GET_NFTS_BY_STUDENT_ADDRESS, GET_NFTS_BY_COMPETENCE_NAME, GET_ALL_NFTS } from '../graphql/Queries';
-import axios from 'axios';
+import { useQuery, useApolloClient } from "@apollo/client";
+import {
+  GET_NFTS_BY_STUDENT_ADDRESS,
+  GET_NFTS_BY_COMPETENCE_NAME,
+  GET_ALL_NFTS,
+} from "../graphql/Queries";
+import NoCompetencesToShow from "./NoCompetencesToShow";
 
 function CompetencesPage() {
   const { isAdmin } = useAppContext();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeSearchTerm, setActiveSearchTerm] = useState("");
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [dataToShow, setDataToShow] = useState();
+  const client = useApolloClient();
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll(
       '[data-bs-togglic="tooltip"]'
@@ -21,40 +30,88 @@ function CompetencesPage() {
     );
   }, []);
 
-  // const { loading, error, data } = useQuery(GET_ALL_NFTS);
-
-  // const { loading, error, data } = useQuery(GET_NFTS_BY_STUDENT_ADDRESS, {
-  //   variables: { studentAddress: "0x2ba9e53f3C8c0bCB39262d0bB569d8833f5288b7"},
-  // });
-
-  const { loading, error, data } = useQuery(GET_NFTS_BY_COMPETENCE_NAME, {
-    variables: { competenceName: "DApp Development"},
-  });
-
-  const [imgCID, setImgCID] = useState();
-  
-  useEffect(() => {
-    const fetchNftData = async () => {
-      if (!loading && !error && data && data.nfts && data.nfts.length > 0) {
-        console.log(data);
-        const tokenURI = data.nfts[0].tokenURI; //uzimamo putanju do prvog NFT objekta
-        try {
-          const response = await axios.get(`https://lavender-familiar-cobra-609.mypinata.cloud/ipfs/${tokenURI}`);
-          console.log(response.data); //dobijamo ceo NFT objekat
-          setImgCID(response.data["image"]); //uzimamo putanju do slike
-        } catch (error) {
-          console.error('Error fetching NFT data:', error);
-        }
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    if (searchTerm !== "" && searchTerm !== activeSearchTerm) {
+      setSearchLoading(true);
+      setActiveSearchTerm(searchTerm);
+      client
+        .query({
+          query: GET_NFTS_BY_COMPETENCE_NAME,
+          variables: { competenceName: searchTerm },
+        })
+        .then(({ data }) => {
+          setSearchLoading(false);
+          setDataToShow(data);
+          console.log(data);
+        })
+        .catch((error) => {
+          setSearchLoading(false);
+        });
+    } else if (searchTerm !== activeSearchTerm) {
+      if (isAdmin) {
+        client
+          .query({
+            query: GET_ALL_NFTS,
+          })
+          .then(({ data }) => {
+            setSearchLoading(false);
+            setDataToShow(data);
+          })
+          .catch((error) => {
+            setSearchLoading(false);
+          });
+      } else {
+        client
+          .query({
+            query: GET_NFTS_BY_STUDENT_ADDRESS,
+            variables: { studentAddress: localStorage.getItem("eth_account") },
+          })
+          .then(({ data }) => {
+            setSearchLoading(false);
+            setDataToShow(data);
+          })
+          .catch((error) => {
+            setSearchLoading(false);
+          });
       }
-    };
+    }
+  };
 
-    fetchNftData();
-  }, [loading, error, data]);
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const { loading, error, data } = useQuery(
+    isAdmin ? GET_ALL_NFTS : GET_NFTS_BY_STUDENT_ADDRESS,
+    {
+      variables: { studentAddress: localStorage.getItem("eth_account") },
+    }
+  );
+
+  useEffect(() => {
+    setDataToShow(data);
+  }, [data]);
 
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">Competences</h1>
-      {isAdmin && !loading && data && (
+      <div className="row justify-content-center">
+        <form className="d-flex col-6 mb-4" onSubmit={handleSearchSubmit}>
+          <input
+            className="form-control me-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <button className="btn btn-outline-success" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
+      {isAdmin && (
         <div className="d-flex justify-content-end mb-3">
           <button
             className={`btn btn-primary ${style.assignButton}`}
@@ -70,33 +127,24 @@ function CompetencesPage() {
       )}
 
       <div className="row">
-        {imgCID && <CompetenceCard
-          title="Competence 1"
-          description="Description of Competence 1"
-          imgPath={`https://lavender-familiar-cobra-609.mypinata.cloud/${imgCID}`}
-        />}
-        <CompetenceCard
-          title="Competence 2"
-          description="Description of Competence 2"
-        />
-        <CompetenceCard
-          title="Competence 3"
-          description="Description of Competence 3"
-        />
-        <CompetenceCard
-          title="Competence 4"
-          description="Description of Competence 4"
-        />
-        <CompetenceCard
-          title="Competence 5"
-          description="Description of Competence 5"
-        />
-        <CompetenceCard
-          title="Competence 6"
-          description="Description of Competence 6"
-        />
+        {dataToShow?.nfts && dataToShow.nfts.length
+          ? dataToShow.nfts.map((nft, i) => (
+              <CompetenceCard
+                id={i}
+                key={i}
+                nft={nft}
+                loading={loading || searchLoading}
+                error={error}
+              />
+            ))
+          : !loading && !searchLoading && <NoCompetencesToShow />}
       </div>
       <AssignCompteneceModal />
+      {(loading || searchLoading) && (
+        <div className="spinner-container">
+          <div className="spinner-border" role="status"></div>
+        </div>
+      )}
     </div>
   );
 }
