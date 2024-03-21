@@ -7,7 +7,7 @@ import style from "./CompetencesPage.module.css";
 import AssignCompteneceModal from "./AssignCompteneceModal";
 import { useAppContext } from "../AppContext";
 import { useQuery } from '@apollo/client';
-import { GET_NFTS_BY_STUDENT_ADDRESS, GET_NFTS_BY_COMPETENCE_NAME, GET_ALL_NFTS } from '../graphql/Queries';
+import { GET_NFTS_BY_STUDENT_ADDRESS, GET_NFTS_BY_COMPETENCE_NAME, GET_ALL_NFTS, GET_NFTS_BY_COMPETENCE_AND_STUDENT } from '../graphql/Queries';
 import axios from 'axios';
 
 function CompetencesPage() {
@@ -27,8 +27,12 @@ function CompetencesPage() {
   //   variables: { studentAddress: "0x2ba9e53f3C8c0bCB39262d0bB569d8833f5288b7"},
   // });
 
-  const { loading, error, data } = useQuery(GET_NFTS_BY_COMPETENCE_NAME, {
-    variables: { competenceName: "DApp Development"},
+  // const { loading, error, data } = useQuery(GET_NFTS_BY_COMPETENCE_NAME, {
+  //   variables: { competenceName: "DApp Development"},
+  // });
+
+  const { loading, error, data } = useQuery(GET_NFTS_BY_COMPETENCE_AND_STUDENT, {
+    variables: { competenceName: "DApp Development", studentAddress: "0x2ba9e53f3C8c0bCB39262d0bB569d8833f5288b7"},
   });
 
   const [imgCID, setImgCID] = useState();
