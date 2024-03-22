@@ -1,30 +1,15 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import CompetenceInfoModal from "./CompetenceInfoModal";
 import { useAppContext } from "../AppContext";
+import { fetchNftData } from "../requests/NFTDataRequest";
 
 function CompetenceCard({ nft, loading, error, id }) {
   const { isAdmin } = useAppContext();
   const [compData, setCompData] = useState();
-  const fetchNftData = async () => {
-    if (!loading && !error) {
-      const tokenURI = nft.tokenURI;
-      axios
-        .get(
-          `https://lavender-familiar-cobra-609.mypinata.cloud/ipfs/${tokenURI}`
-        )
-        .then((response) => {
-          setCompData(response.data);
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error("Error fetching NFT data:", error);
-        });
-    }
-  };
+
   useEffect(() => {
     if (!compData?.image) {
-      fetchNftData();
+      fetchNftData(loading, error, nft, setCompData);
     }
   }, []);
   return (

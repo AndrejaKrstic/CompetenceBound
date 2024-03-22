@@ -1,16 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./Layout.module.css";
 import { useAppContext } from "../AppContext";
 import { addMetamaskListener } from "../controllers/AddAccountListenersController";
 
 function Layout({ children }) {
   const { logOutUser, logInUser } = useAppContext();
+  const [currentPath, setCurrentPath] = useState("");
 
   useEffect(() => {
     addMetamaskListener(logInUser);
+    setPath();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  const setPath = () => {
+    const pathAfterBase = window.location.href.substring(
+      window.location.origin.length
+    );
+    console.log(pathAfterBase);
+    setCurrentPath(pathAfterBase);
+  };
   return (
     <div className="main">
       <nav
@@ -38,23 +46,35 @@ function Layout({ children }) {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <a
-                  className="nav-link text-white fw-bold"
+                  className="nav-link fw-bold"
                   href="/competences"
-                  style={{}}
+                  style={{
+                    color: currentPath === "/competences" ? "black" : "white",
+                  }}
                 >
                   Competences
                 </a>
               </li>
               <li className="nav-item">
                 <a
-                  className="nav-link text-white fw-bold"
+                  className="nav-link fw-bold"
                   href="/competency-model"
+                  style={{
+                    color:
+                      currentPath === "/competency-model" ? "black" : "white",
+                  }}
                 >
                   Competency Model
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link text-white fw-bold" href="/blog">
+                <a
+                  className="nav-link fw-bold"
+                  href="/blog"
+                  style={{
+                    color: currentPath === "/blog" ? "black" : "white",
+                  }}
+                >
                   Blog
                 </a>
               </li>

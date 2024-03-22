@@ -9,25 +9,25 @@ export function useAppContext() {
 
 const ContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("eth_account")
+    sessionStorage.getItem("eth_account")
   );
-  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("is_admin") === "true");
+  const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem("is_admin") === "true");
 
   const logInUser = (account) => {
-    localStorage.setItem("eth_account", account);
+    sessionStorage.setItem("eth_account", account);
     if (account === process.env.REACT_APP_ADMIN_ACCOUNT) {
-      localStorage.setItem("is_admin", "true");
+      sessionStorage.setItem("is_admin", "true");
       setIsAdmin(true);
     } else {
-      localStorage.setItem("is_admin", "false");
+      sessionStorage.setItem("is_admin", "false");
       setIsAdmin(false);
     }
     setIsAuthenticated(true);
   };
 
   const logOutUser = () => {
-    localStorage.removeItem("is_admin");
-    localStorage.removeItem("eth_account");
+    sessionStorage.removeItem("is_admin");
+    sessionStorage.removeItem("eth_account");
     setIsAdmin(false);
     setIsAuthenticated(false);
   };

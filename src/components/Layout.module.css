@@ -1,9 +1,13 @@
 .layoutNavbar {
   background-color: #ff7f00;
+  z-index: 100;
 }
 
 .layoutNavbar a:hover {
   color: black !important;
+}
+.layoutNavbar a {
+  color: white;
 }
 
 .disconnectButton {
