@@ -7,22 +7,27 @@ const uploadToIpfs = async (comp) => {
   switch (compLevel) {
     case 1:
       imageUrl = "ipfs/QmPS6jDAq9HejYYAQMYiXLFPnZSzbCy8jyWS2KbA7ZzxDh";
-      console.log("ok");
+      console.log("lvl1- purple");
       break;
     case 2:
-      console.log("dada");
+      imageUrl = "ipfs/QmUynVNeXc2iJUbYVgFZxDngfJFJjZQ7oBXt5LrpQxLVRy";
+      console.log("lvl2 - blue");
       break;
     case 3:
-      console.log("nene");
+      imageUrl = "ipfs/QmQ2iY7YCohoqKmfobJjAq4JQtpnqrGtJi5vAr3gqaDdna";
+      console.log("lvl3 - teal");
       break;
     case 4:
-      console.log("opa");
+      imageUrl = "ipfs/QmRsm9s87oPwcsyNzQ4mKVwLDE8pdJhiKjZ6XL9xj3XikU";
+      console.log("lvl4 - rose gold");
       break;
     case 5:
-      console.log("cupa");
+      imageUrl = "ipfs/QmbKEVQLBpPDySD5saNbE7gewPZfDyxcgVc2Xi3VzGPXmh";
+      console.log("lvl5 - silver");
       break;
     case 6:
-      console.log("supa");
+      imageUrl = "ipfs/QmbBrmSvN3Q7DHpwvXKj5xENe45xn587vb8G74nrHJSRo7";
+      console.log("lvl6 - golden");
       break;
     default:
       console.log("Invalid competence level");
@@ -64,4 +69,5 @@ const uploadToIpfs = async (comp) => {
 
 export const assignCompetence = async (comp) => {
   // await uploadToIpfs(comp);
+
 };
