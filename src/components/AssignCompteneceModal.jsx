@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import comps from "../static/competences.json";
 import { assignCompetence } from "../controllers/AssignCompetenceController";
+import Web3 from "web3";
 
-const contractAddress = "0xC1d2b725a73be07c60ca0eCe6F6F9e2F8511F476";
-const sepoliaRPCUrl = "https://sepolia.infura.io/v3/e2d17050f550446dad42f6bab853f289";
+const sepoliaRPCUrl =
+  "https://sepolia.infura.io/v3/e2d17050f550446dad42f6bab853f289";
 
 function AssignCompteneceModal() {
   const [competences, setCompetences] = useState([]);
   const [selectedComptenece, setSelectedCompetence] = useState();
-
+  const [web3, setWeb3] = useState();
+  
   const [data, setData] = useState({
     name: "",
     surname: "",
@@ -23,10 +25,16 @@ function AssignCompteneceModal() {
     competenceLevel: 0,
   });
 
+  useEffect(() => {
+    const web3Instance = new Web3(sepoliaRPCUrl);
+    console.log(web3Instance);
+    setWeb3(web3Instance);
+  }, []);
+
   const fetchCompetences = () => {
     setCompetences(comps);
   };
-
+  
   useEffect(() => {
     fetchCompetences();
   }, []);
@@ -51,11 +59,15 @@ function AssignCompteneceModal() {
     setData({ ...data, competenceLevel: level });
   };
 
+  useEffect(() => {
+    if (data.competenceLevel) {
+      assignCompetence(data, web3);
+    }
+  }, [data.competenceLevel, web3]);
+  
   const handleFormSubmit = (e) => {
     e.preventDefault();
     calculateCompetencelevel();
-    console.log(data);
-    assignCompetence(data);
   };
 
   const handleInputChange = (e) => {

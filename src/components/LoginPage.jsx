@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Web3 from "web3";
 import style from "./LoginPage.module.css";
 import photo from "../images/MetaMask_Fox.svg.png";
 import { useAppContext } from "../AppContext";
 import { addMetamaskListener } from "../controllers/AddAccountListenersController";
-
-const sepoliaRPCUrl =
-  "https://sepolia.infura.io/v3/22db25488a504c54b022c84cd9e9eca8";
+import Web3 from "web3";
 
 const LoginPage = () => {
   const { logInUser } = useAppContext();
 
-  const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(null);
 
   const connectWallet = async () => {
@@ -20,10 +16,14 @@ const LoginPage = () => {
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        setAccount(accounts[0]);
-        console.log("Connected to Ethereum account: ", accounts[0]);
-        logInUser(accounts[0]);
-        setAccount(addMetamaskListener(logInUser))
+        const originalAddress = accounts[0];
+        const web3 = new Web3(window.ethereum);
+        const checksumAddress = web3.utils.toChecksumAddress(originalAddress);
+        console.log("Connected to Ethereum account: ", checksumAddress);
+        setAccount(checksumAddress);
+        logInUser(checksumAddress);
+     
+        setAccount(addMetamaskListener(logInUser));
       } else {
         console.log("MetaMask is not installed.");
       }
@@ -31,12 +31,6 @@ const LoginPage = () => {
       console.error("Error connecting to MetaMask: ", error);
     }
   };
-
-  useEffect(() => {
-    const web3Instance = new Web3(sepoliaRPCUrl);
-    console.log(web3Instance);
-    setWeb3(web3Instance);
-  }, []);
 
   return (
     <div className={style.container}>
