@@ -164,9 +164,16 @@ function CompetencesPage() {
         const uniqueStudentAdresses = [
           ...new Set(nfts.map((obj) => obj.studentAddress)),
         ];
-        const uniqueStudents = nfts.filter((obj) =>
-          uniqueStudentAdresses.includes(obj.studentAddress)
-        );
+        console.log(uniqueStudentAdresses);
+        const uniqueStudents = [];
+        nfts.forEach((nft) => {
+          const isUnique = !uniqueStudents.some(
+            (uniqueNft) => uniqueNft.studentAddress === nft.studentAddress
+          );
+          if (isUnique) {
+            uniqueStudents.push(nft);
+          }
+        });
         setStudentSearchOptions(uniqueStudents);
       }
     }
@@ -301,7 +308,7 @@ function CompetencesPage() {
           ? dataToShow.nfts.map((nft, i) => (
               <CompetenceCard
                 id={i}
-                key={i}
+                key={nft.tokenURI}
                 nft={nft}
                 loading={loading || searchLoading}
                 error={error}

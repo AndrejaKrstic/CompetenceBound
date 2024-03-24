@@ -79,21 +79,23 @@ export const assignCompetences = async (
   setSearchLoading,
   setShowErrorModal
 ) => {
-  // console.log(allData);
-  console.log(comp);
   const studentCompetences = allData.nfts.filter((data) => {
     return data.competenceId === 0 && data.owner === comp.metamaskAccount;
   });
-  let maxLevel = studentCompetences.reduce(
-    (max, obj) => Math.max(max, obj.competenceLevel),
-    -Infinity
-  );
-  console.log(studentCompetences);
-  console.log("MAX LEVEL:");
-  console.log(maxLevel);
+  const activeTransactions = [];
+  let maxLevel;
+  if (!studentCompetences.length) {
+    maxLevel = 0;
+  } else {
+    maxLevel = studentCompetences.reduce(
+      (max, obj) => Math.max(max, obj.competenceLevel),
+      -Infinity
+    );
+  }
+  setSearchLoading(true);
   for (let i = maxLevel + 1; i <= comp.competenceLevel; i++) {
     if (i === comp.competenceLevel) {
-      await assignCompetence(comp, web3);
+      await assignCompetence(comp, web3, activeTransactions);
     } else {
       const dummyComp = structuredClone(comp);
       dummyComp.competenceLevel = i;
@@ -101,19 +103,52 @@ export const assignCompetences = async (
         dummyComp.competence.elements[key] = "NA";
       }
       console.log(dummyComp);
-      await assignCompetence(dummyComp, web3)
+      await assignCompetence(dummyComp, web3, activeTransactions);
     }
   }
-  // setSearchLoading(true);
+  const interval = setInterval(async () => {
+    let allFinished = activeTransactions.every((obj) => obj.finished === true);
+    let hasError = activeTransactions.some((obj) => obj.error === true);
+
+    if (allFinished) {
+      setSearchLoading(false);
+      clearInterval(interval);
+    }
+
+    if (hasError) {
+      setSearchLoading(false);
+      setShowErrorModal(true);
+      clearInterval(interval);
+    }
+  }, 2000);
 };
 
-async function assignCompetence(comp, web3) {
+async function assignCompetence(comp, web3, activeTransactions) {
   if (comp.competenceLevel && comp.metamaskAccount && web3) {
     const tokenURI = await uploadToIpfs(comp);
     console.log(tokenURI);
     const account = sessionStorage.getItem("eth_account");
     console.log("eth_account in assignCompetence: ", account);
-    await mintNFT(comp, tokenURI, account, web3);
+    const hash = await mintNFT(
+      comp,
+      tokenURI,
+      account,
+      web3,
+      activeTransactions
+    );
+    if (hash) {
+      activeTransactions.push({ id: hash, finished: false, error: false });
+      const interval = setInterval(async () => {
+        const receipt = await web3.eth.getTransactionReceipt(hash);
+        if (receipt && receipt.blockNumber) {
+          const transaction = activeTransactions.find((obj) => obj.id === hash);
+          transaction.finished = true;
+          clearInterval(interval);
+        }
+      }, 3000);
+    } else {
+      activeTransactions.push({ id: hash, finished: false, error: true });
+    }
   }
 }
 
@@ -121,10 +156,8 @@ async function mintNFT(comp, tokenURI, account, web3) {
   if (tokenURI && account) {
     try {
       const contract = new web3.eth.Contract(SoulboundNFT.abi, contractAddress);
-      // addTransactionListener(contract, setSearchLoading, setShowErrorModal);
 
       const transactionParameters = {
-        //validacija podataka?
         to: contractAddress,
         from: account,
         data: contract.methods
@@ -137,29 +170,10 @@ async function mintNFT(comp, tokenURI, account, web3) {
         params: [transactionParameters],
       });
       console.log("Transaction hash: ", txHash);
-      // setSearchLoading(false);
-      //if(txHash) return true ?
+      return txHash;
     } catch (error) {
-      // setSearchLoading(false);
-      // setShowErrorModal(true);
       console.log("Error sending transaction: ", error);
+      return null;
     }
   }
-}
-
-function addTransactionListener(contract, setSearchLoading, setShowErrorModal) {
-  contract.events
-    .TransactionSuccess()
-    .on("data", (event) => {
-      console.log("Transaction success:", event.returnValues);
-    })
-    .on("error", console.error);
-
-  // Subscribe to failure event
-  contract.events
-    .TransactionFailure()
-    .on("data", (event) => {
-      console.log("Transaction failed:", event.returnValues);
-    })
-    .on("error", console.error);
 }
