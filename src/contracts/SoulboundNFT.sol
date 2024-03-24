@@ -23,7 +23,7 @@ contract SoulboundNFT is ERC721, ERC721URIStorage, Ownable {
 
     constructor() ERC721("SoulboundNFT", "SBNFT") {}
 
-    function mintNFT(string memory _tokenURI, address _to, uint256 competenceId, uint8 competenceLevel) public onlyOwner {
+    function mintNFT(string memory _tokenURI, address _to, uint256 competenceId, uint8 competenceLevel) public {
          require(competenceId < competencesName.length, "Competence ID out of range");
         
          uint256 tokenId = _tokenIdCounter.current();

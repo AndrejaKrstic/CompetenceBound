@@ -1,14 +1,13 @@
-const SoulboundNFTNFTABI = require('../contracts/SoulboundNFT.json');
+const SoulboundNFT = require('../contracts/SoulboundNFT.json');
 const { ApolloServer, gql } = require('apollo-server');
 const { ethers } = require('ethers');
 
-const contractABI = SoulboundNFTNFTABI.abi;
-const contractAddress = "0xC1d2b725a73be07c60ca0eCe6F6F9e2F8511F476";
+const contractABI = SoulboundNFT.abi;
+const contractAddress = SoulboundNFT.contractAddress;
 
 const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/e2d17050f550446dad42f6bab853f289");
 const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
-// Define your GraphQL schema
 const typeDefs = gql`
   type NFT {
   id: ID!
@@ -41,20 +40,17 @@ type Query {
 const resolvers = {
   Query: {
     nfts: async (_, { studentAddress, competenceName }) => {
-      // Fetch all issued NFTs
       const totalTokens = await contract.getCurrentToken();
 
-      // Iterate over all tokens and fetch metadata for each
       const nfts = [];
       for (let i = 0; i < totalTokens; i++) {
         const tokenURI = await contract.tokenURI(i);
         const owner = await contract.ownerOf(i);
         const competences = await contract.competences(i);
-        const competenceId = competences.competenceId.toNumber(); // Convert BigNumber to JavaScript number
-        const competenceLevel = competences.competenceLevel; // Use as is, it's already a regular number (uint8)
+        const competenceId = competences.competenceId.toNumber(); 
+        const competenceLevel = competences.competenceLevel;
         const competenceNameForToken = await contract.competencesName(competenceId);
         
-        // Check if the competence name or student address matches the provided criteria
         if ((!competenceName || competenceNameForToken === competenceName) && 
             (!studentAddress || owner === studentAddress)) {
           nfts.push({
@@ -70,11 +66,9 @@ const resolvers = {
       return nfts;
     },
     competenceAssignedEvents: async (_, { studentAddress, competenceName }) => {
-      // Fetch historical CompetenceAssigned events from the blockchain
       const filter = contract.filters.CompetenceAssigned(null, null, studentAddress, competenceName, null);
       const events = await contract.queryFilter(filter);
 
-      // Transform events into GraphQL-compatible format
       return events.map(event => ({
         tokenURI: event.args.tokenURI,
         tokenId: event.args.tokenId.toNumber(),
@@ -84,11 +78,9 @@ const resolvers = {
       }));
     },
     competenceAddedEvents: async () => {
-      // Fetch historical CompetenceAdded events from the blockchain
       const filter = contract.filters.CompetenceAdded(null, null);
       const events = await contract.queryFilter(filter);
 
-      // Transform events into GraphQL-compatible format
       return events.map(event => ({
         competenceName: event.args.competenceName,
         competenceId: event.args.competenceId.toNumber(),

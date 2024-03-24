@@ -2,7 +2,7 @@ import axios from "axios";
 import SoulboundNFT from "../contracts/SoulboundNFT.json";
 import { getAllNFTs } from "../requests/NFTRequest";
 const JWT = process.env.REACT_APP_JWT;
-const contractAddress = "0xC1d2b725a73be07c60ca0eCe6F6F9e2F8511F476";
+const contractAddress = SoulboundNFT.contractAddress;
 
 const uploadToIpfs = async (comp) => {
   const compLevel = comp.competenceLevel;
@@ -81,6 +81,7 @@ export const assignCompetences = async (
   setDataToShow,
   client
 ) => {
+  console.log("assignCompetences");
   const studentCompetences = allData.nfts.filter((data) => {
     return data.competenceId === 0 && data.owner === comp.metamaskAccount;
   });
@@ -88,75 +89,94 @@ export const assignCompetences = async (
   let maxLevel;
   if (!studentCompetences.length) {
     maxLevel = 0;
+    console.log("studentCompetences nema")
   } else {
     maxLevel = studentCompetences.reduce(
       (max, obj) => Math.max(max, obj.competenceLevel),
       -Infinity
     );
+    console.log("studentCompetences ima")
+
   }
   setSearchLoading(true);
   for (let i = maxLevel + 1; i <= comp.competenceLevel; i++) {
     if (i === comp.competenceLevel) {
+      console.log("dodeljivanje najveceg nivoa");
       await assignCompetence(comp, web3, activeTransactions);
     } else {
+      console.log(`dodeljivanje nivoa ${i}`)
       const dummyComp = structuredClone(comp);
       dummyComp.competenceLevel = i;
       for (let key in dummyComp.competence.elements) {
         dummyComp.competence.elements[key] = "NA";
       }
-      console.log(dummyComp);
+      console.log("dummy: ",dummyComp);
       await assignCompetence(dummyComp, web3, activeTransactions);
     }
   }
   const interval = setInterval(async () => {
+    console.log("active transactions: ", activeTransactions)
     let allFinished = activeTransactions.every((obj) => obj.finished === true);
     let hasError = activeTransactions.some((obj) => obj.error === true);
-
+    console.log("setInterval")
+    console.log("all finished: ", allFinished);
+    console.log("has error: ", hasError)
     if (allFinished) {
-      setSearchLoading(false);
       clearInterval(interval);
-      getAllNFTs(client, setSearchLoading, setDataToShow, setShowErrorModal);
+      console.log("svi su prosli uzimamo query")
+      setTimeout(()=>{
+        getAllNFTs(client, setSearchLoading, setDataToShow, setShowErrorModal);
+      }, 4000);
     }
 
     if (hasError) {
-      setSearchLoading(false);
       setShowErrorModal(true);
       clearInterval(interval);
-      getAllNFTs(client, setSearchLoading, setDataToShow, setShowErrorModal);
+      console.log("ima error uzimamo query")
+      setTimeout(()=>{
+        getAllNFTs(client, setSearchLoading, setDataToShow, setShowErrorModal);
+      }, 4000);
     }
   }, 2000);
 };
 
 async function assignCompetence(comp, web3, activeTransactions) {
+  console.log("assigncompetence")
   if (comp.competenceLevel && comp.metamaskAccount && web3) {
     const tokenURI = await uploadToIpfs(comp);
     console.log(tokenURI);
     const account = sessionStorage.getItem("eth_account");
     console.log("eth_account in assignCompetence: ", account);
-    const hash = await mintNFT(
+    const txHash = await mintNFT(
       comp,
       tokenURI,
       account,
-      web3,
-      activeTransactions
+      web3
     );
-    if (hash) {
-      activeTransactions.push({ id: hash, finished: false, error: false });
+    console.log("hash: ", txHash);
+    if (txHash) {
+      activeTransactions.push({ id: txHash, finished: false, error: false });
       const interval = setInterval(async () => {
-        const receipt = await web3.eth.getTransactionReceipt(hash);
-        if (receipt && receipt.blockNumber) {
-          const transaction = activeTransactions.find((obj) => obj.id === hash);
-          transaction.finished = true;
-          clearInterval(interval);
+        try {
+          const receipt = await window.ethereum.request({
+            method: 'eth_getTransactionReceipt',
+            params: [txHash],
+          });
+          console.log("Receipt: ", receipt, " za tx: ", txHash);
+          if (receipt && receipt.blockNumber) {
+            const transaction = activeTransactions.find((obj) => obj.id === txHash);
+            transaction.finished = true;
+            clearInterval(interval);
+            console.log("transaction finished")
+          }
+        } catch (error) {
+            console.log(error);
         }
-      }, 3000);
-    } else {
-      activeTransactions.push({ id: hash, finished: false, error: true });
-    }
-  }
-}
+  }, 3000);
+}}}
 
 async function mintNFT(comp, tokenURI, account, web3) {
+  console.log("mintNFT")
   if (tokenURI && account) {
     try {
       const contract = new web3.eth.Contract(SoulboundNFT.abi, contractAddress);
