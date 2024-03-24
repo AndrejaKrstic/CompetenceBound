@@ -72,42 +72,94 @@ const uploadToIpfs = async (comp) => {
   }
 };
 
-export const assignCompetence = async (comp, web3) => {
-  //ovde moraju da se odrede objekti i provera da li postoji vec izdat
+export const assignCompetences = async (
+  comp,
+  web3,
+  allData,
+  setSearchLoading,
+  setShowErrorModal
+) => {
+  // console.log(allData);
+  console.log(comp);
+  const studentCompetences = allData.nfts.filter((data) => {
+    return data.competenceId === 0 && data.owner === comp.metamaskAccount;
+  });
+  let maxLevel = studentCompetences.reduce(
+    (max, obj) => Math.max(max, obj.competenceLevel),
+    -Infinity
+  );
+  console.log(studentCompetences);
+  console.log("MAX LEVEL:");
+  console.log(maxLevel);
+  for (let i = maxLevel + 1; i <= comp.competenceLevel; i++) {
+    if (i === comp.competenceLevel) {
+      await assignCompetence(comp, web3);
+    } else {
+      const dummyComp = structuredClone(comp);
+      dummyComp.competenceLevel = i;
+      for (let key in dummyComp.competence.elements) {
+        dummyComp.competence.elements[key] = "NA";
+      }
+      console.log(dummyComp);
+      await assignCompetence(dummyComp, web3)
+    }
+  }
+  // setSearchLoading(true);
+};
 
+async function assignCompetence(comp, web3) {
   if (comp.competenceLevel && comp.metamaskAccount && web3) {
     const tokenURI = await uploadToIpfs(comp);
     console.log(tokenURI);
-
     const account = sessionStorage.getItem("eth_account");
     console.log("eth_account in assignCompetence: ", account);
+    await mintNFT(comp, tokenURI, account, web3);
+  }
+}
 
-    if (tokenURI && account) {
-      //izdvoj u posebnu fju?
-      try {
-        const contract = new web3.eth.Contract(
-          SoulboundNFT.abi,
-          contractAddress
-        );
+async function mintNFT(comp, tokenURI, account, web3) {
+  if (tokenURI && account) {
+    try {
+      const contract = new web3.eth.Contract(SoulboundNFT.abi, contractAddress);
+      // addTransactionListener(contract, setSearchLoading, setShowErrorModal);
 
-        const transactionParameters = { //validacija podataka?
-          to: contractAddress,
-          from: account,
-          data: contract.methods
-            .mintNFT(tokenURI, comp.metamaskAccount, 0, comp.competenceLevel)
-            .encodeABI(),
-        };
+      const transactionParameters = {
+        //validacija podataka?
+        to: contractAddress,
+        from: account,
+        data: contract.methods
+          .mintNFT(tokenURI, comp.metamaskAccount, 0, comp.competenceLevel)
+          .encodeABI(),
+      };
 
-        const txHash = await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params: [transactionParameters],
-        });
-        console.log("Transaction hash: ", txHash);
-        //if(txHash) return true ?
-      } catch (error) {
-        console.log("Error sending transaction: ", error);
-      }
+      const txHash = await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [transactionParameters],
+      });
+      console.log("Transaction hash: ", txHash);
+      // setSearchLoading(false);
+      //if(txHash) return true ?
+    } catch (error) {
+      // setSearchLoading(false);
+      // setShowErrorModal(true);
+      console.log("Error sending transaction: ", error);
     }
   }
-  console.log("Assign competence arguments are falsy"); //return false; ?
-};
+}
+
+function addTransactionListener(contract, setSearchLoading, setShowErrorModal) {
+  contract.events
+    .TransactionSuccess()
+    .on("data", (event) => {
+      console.log("Transaction success:", event.returnValues);
+    })
+    .on("error", console.error);
+
+  // Subscribe to failure event
+  contract.events
+    .TransactionFailure()
+    .on("data", (event) => {
+      console.log("Transaction failed:", event.returnValues);
+    })
+    .on("error", console.error);
+}

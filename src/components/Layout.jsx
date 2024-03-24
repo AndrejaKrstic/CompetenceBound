@@ -16,7 +16,6 @@ function Layout({ children }) {
     const pathAfterBase = window.location.href.substring(
       window.location.origin.length
     );
-    console.log(pathAfterBase);
     setCurrentPath(pathAfterBase);
   };
   return (

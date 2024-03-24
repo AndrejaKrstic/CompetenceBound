@@ -40,7 +40,7 @@ function CompetencesPage() {
   }, []);
 
   const handleCompetenceFilterChange = (event) => {
-    setSearchActive(true)
+    setSearchActive(true);
     setSelectedCompetenceFilter(event.target.value);
     if (event.target.value) {
       if (isAdmin && selectedStudentFilter) {
@@ -81,9 +81,9 @@ function CompetencesPage() {
         );
       } else if (isAdmin && !selectedStudentFilter) {
         getAllNFTs(client, setSearchLoading, setDataToShow, setShowErrorModal);
-        setSearchActive(false)
+        setSearchActive(false);
       } else {
-        setSearchActive(false)
+        setSearchActive(false);
         getNFTSByStudentAdress(
           client,
           setSearchLoading,
@@ -95,7 +95,7 @@ function CompetencesPage() {
     }
   };
   const handleStudentFilterChange = (event) => {
-    setSearchActive(true)
+    setSearchActive(true);
     setSelectedStudentFilter(event.target.value);
     if (event.target.value) {
       if (selectedCompetenceFilter) {
@@ -153,7 +153,7 @@ function CompetencesPage() {
         sessionStorage.getItem("eth_account")
       );
     }
-    setSearchActive(false)
+    setSearchActive(false);
   };
 
   const assignSelectOptions = async () => {
@@ -196,6 +196,9 @@ function CompetencesPage() {
         "There was an error processing your request, please try again later.",
         "danger"
       );
+      setTimeout(() => {
+        setShowErrorModal(false);
+      }, 3000);
     } else {
       alertRef.current.hideAlert();
     }
@@ -204,9 +207,6 @@ function CompetencesPage() {
   useEffect(() => {
     if (error) {
       setShowErrorModal(true);
-      setTimeout(() => {
-        setShowErrorModal(false);
-      }, 3000);
     }
   }, [error]);
 
@@ -253,8 +253,7 @@ function CompetencesPage() {
                     ))
                   ) : (
                     <option value="">No competences to filter...</option>
-                    )}
-                    <option value="sd">Test</option>
+                  )}
                 </select>
               </div>
               {isAdmin && (
@@ -310,7 +309,13 @@ function CompetencesPage() {
             ))
           : !loading && !searchLoading && <NoCompetencesToShow />}
       </div>
-      {isAdmin && <AssignCompteneceModal />}
+      {isAdmin && (
+        <AssignCompteneceModal
+          setSearchLoading={setSearchLoading}
+          setShowErrorModal={setShowErrorModal}
+          allData={dataToShow}
+        />
+      )}
       {(loading || searchLoading) && (
         <div className="spinner-container">
           <div className="spinner-border" role="status"></div>

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import comps from "../static/competences.json";
-import { assignCompetence } from "../controllers/AssignCompetenceController";
+import { assignCompetences } from "../controllers/AssignCompetenceController";
 import Web3 from "web3";
 
 const sepoliaRPCUrl =
   "https://sepolia.infura.io/v3/e2d17050f550446dad42f6bab853f289";
 
-function AssignCompteneceModal() {
+function AssignCompteneceModal({ setSearchLoading, setShowErrorModal, allData }) {
   const [competences, setCompetences] = useState([]);
   const [selectedComptenece, setSelectedCompetence] = useState();
   const [web3, setWeb3] = useState();
-  
+
   const [data, setData] = useState({
     name: "",
     surname: "",
@@ -25,6 +25,29 @@ function AssignCompteneceModal() {
     competenceLevel: 0,
   });
 
+  const clearForm = () => {
+    setData({
+      name: "",
+      surname: "",
+      studentId: "",
+      metamaskAccount: "",
+      competence: {
+        name: "",
+        description: "",
+        dispositions: [],
+        elements: {},
+      },
+      competenceLevel: 0,
+    });
+    document.getElementById("modal-close-button").click();
+    setSelectedCompetence("");
+    document.getElementById("inputName").value = "";
+    document.getElementById("inputSurname").value = "";
+    document.getElementById("inputStudentId").value = "";
+    document.getElementById("inputMetamaskAccount").value = "";
+    document.getElementById("competenceSelect").selectedIndex = 0;
+  };
+
   useEffect(() => {
     const web3Instance = new Web3(sepoliaRPCUrl);
     console.log(web3Instance);
@@ -34,7 +57,7 @@ function AssignCompteneceModal() {
   const fetchCompetences = () => {
     setCompetences(comps);
   };
-  
+
   useEffect(() => {
     fetchCompetences();
   }, []);
@@ -45,8 +68,12 @@ function AssignCompteneceModal() {
     const obj = data.competence.elements;
 
     for (let key in obj) {
-      sum += parseFloat(obj[key]);
-      count++;
+      if (obj[key]) {
+        sum += parseFloat(obj[key]);
+        count++;
+      } else {
+        return;
+      }
     }
     let level = sum / count;
     let decimalPart = level - Math.floor(level);
@@ -61,12 +88,14 @@ function AssignCompteneceModal() {
 
   useEffect(() => {
     if (data.competenceLevel) {
-      assignCompetence(data, web3);
+      assignCompetences(data, web3, allData, setSearchLoading, setShowErrorModal);
+      clearForm();
     }
   }, [data.competenceLevel, web3]);
-  
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    console.log(data);
     calculateCompetencelevel();
   };
 
@@ -94,11 +123,13 @@ function AssignCompteneceModal() {
 
   const handleElementSelectChange = (e) => {
     const [level, element] = e.target.value.split(",");
-    let comp = data.competence;
-    let elements = comp.elements;
-    elements = { ...elements, [element]: level };
-    comp = { ...comp, elements: elements };
-    setData({ ...data, competence: comp });
+    if (level) {
+      let comp = data.competence;
+      let elements = comp.elements;
+      elements = { ...elements, [element]: level };
+      comp = { ...comp, elements: elements };
+      setData({ ...data, competence: comp });
+    }
   };
   return (
     <div
@@ -115,6 +146,7 @@ function AssignCompteneceModal() {
               Assign a competence
             </h1>
             <button
+              id="modal-close-button"
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"
