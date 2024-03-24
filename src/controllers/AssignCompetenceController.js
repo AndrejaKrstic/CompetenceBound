@@ -1,6 +1,6 @@
 import axios from "axios";
 import SoulboundNFT from "../contracts/SoulboundNFT.json";
-import { data } from "jquery";
+import { getAllNFTs } from "../requests/NFTRequest";
 const JWT = process.env.REACT_APP_JWT;
 const contractAddress = "0xC1d2b725a73be07c60ca0eCe6F6F9e2F8511F476";
 
@@ -77,7 +77,9 @@ export const assignCompetences = async (
   web3,
   allData,
   setSearchLoading,
-  setShowErrorModal
+  setShowErrorModal,
+  setDataToShow,
+  client
 ) => {
   const studentCompetences = allData.nfts.filter((data) => {
     return data.competenceId === 0 && data.owner === comp.metamaskAccount;
@@ -113,12 +115,14 @@ export const assignCompetences = async (
     if (allFinished) {
       setSearchLoading(false);
       clearInterval(interval);
+      getAllNFTs(client, setSearchLoading, setDataToShow, setShowErrorModal);
     }
 
     if (hasError) {
       setSearchLoading(false);
       setShowErrorModal(true);
       clearInterval(interval);
+      getAllNFTs(client, setSearchLoading, setDataToShow, setShowErrorModal);
     }
   }, 2000);
 };

@@ -321,6 +321,7 @@ function CompetencesPage() {
           setSearchLoading={setSearchLoading}
           setShowErrorModal={setShowErrorModal}
           allData={dataToShow}
+          setDataToShow={setDataToShow}
         />
       )}
       {(loading || searchLoading) && (

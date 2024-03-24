@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import comps from "../static/competences.json";
 import { assignCompetences } from "../controllers/AssignCompetenceController";
 import Web3 from "web3";
+import { useApolloClient } from "@apollo/client";
 
 const sepoliaRPCUrl =
   "https://sepolia.infura.io/v3/e2d17050f550446dad42f6bab853f289";
 
-function AssignCompteneceModal({ setSearchLoading, setShowErrorModal, allData }) {
+function AssignCompteneceModal({
+  setSearchLoading,
+  setShowErrorModal,
+  allData,
+  setDataToShow,
+}) {
   const [competences, setCompetences] = useState([]);
   const [selectedComptenece, setSelectedCompetence] = useState();
   const [web3, setWeb3] = useState();
+  const client = useApolloClient();
 
   const [data, setData] = useState({
     name: "",
@@ -88,7 +95,15 @@ function AssignCompteneceModal({ setSearchLoading, setShowErrorModal, allData })
 
   useEffect(() => {
     if (data.competenceLevel) {
-      assignCompetences(data, web3, allData, setSearchLoading, setShowErrorModal);
+      assignCompetences(
+        data,
+        web3,
+        allData,
+        setSearchLoading,
+        setShowErrorModal,
+        setDataToShow,
+        client
+      );
       clearForm();
     }
   }, [data.competenceLevel, web3]);
