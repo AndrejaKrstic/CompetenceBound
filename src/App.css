@@ -2,6 +2,10 @@ body {
   height: 100vh;
   margin: 0px;
   font-family: "Raleway", sans-serif;
+  background-color: rgba(251, 247, 247, 1);
+  background-image: url("./images/bck.jpg");
+  background-repeat: repeat;
+  background-size: cover;
 }
 
 .main {

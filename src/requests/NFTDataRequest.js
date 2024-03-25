@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const fetchNftData = async (loading, error, nft, setCompData) => {
-  console.log(nft);
   if (!loading && !error) {
     const tokenURI = nft.tokenURI;
     axios
@@ -10,7 +9,6 @@ export const fetchNftData = async (loading, error, nft, setCompData) => {
       )
       .then((response) => {
         setCompData(response.data);
-        console.log(response);
       })
       .catch((error) => {
         console.error("Error fetching NFT data:", error);

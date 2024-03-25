@@ -234,7 +234,7 @@ function CompetencesPage() {
           </button>
         </div>
       )}
-      {dataToShow?.nfts.length || searchActive ? (
+      {dataToShow?.nfts?.length || searchActive ? (
         <div className="row justify-content-center">
           <form className="col-lg-6 col-md-8 col-sm-10">
             <div className={`row ${!isAdmin ? "justify-content-center" : ""}`}>

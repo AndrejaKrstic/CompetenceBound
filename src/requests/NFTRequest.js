@@ -23,9 +23,7 @@ export const getAllNFTs = (
     })
     .catch((error) => {
       setShowErrorModal(true);
-      setTimeout(() => {
-        setShowErrorModal(false);
-      }, 3000);
+      setShowErrorModal(false);
       setSearchLoading(false);
     });
 };
@@ -51,9 +49,7 @@ export const getNFTsByCompetenceName = (
     .catch((error) => {
       setSearchLoading(false);
       setShowErrorModal(true);
-      setTimeout(() => {
-        setShowErrorModal(false);
-      }, 3000);
+      setShowErrorModal(false);
     });
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CompetenceInfoModal from "./CompetenceInfoModal";
 import { useAppContext } from "../AppContext";
 import { fetchNftData } from "../requests/NFTDataRequest";
@@ -6,10 +6,12 @@ import { fetchNftData } from "../requests/NFTDataRequest";
 function CompetenceCard({ nft, loading, error, id }) {
   const { isAdmin } = useAppContext();
   const [compData, setCompData] = useState();
+  const hasMounted = useRef(false);
 
   useEffect(() => {
-    if (!compData?.image) {
+    if (!hasMounted.current) {
       fetchNftData(loading, error, nft, setCompData);
+      hasMounted.current = true;
     }
   }, []);
   return (
