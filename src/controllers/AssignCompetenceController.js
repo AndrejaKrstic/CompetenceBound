@@ -111,7 +111,13 @@ export const assignCompetences = async (
   for (let i = maxLevel + 1; i <= comp.competenceLevel; i++) {
     if (i === comp.competenceLevel) {
       console.log("dodeljivanje najveceg nivoa");
-      await assignCompetence(comp, web3, activeTransactions);
+      await assignCompetence(
+        comp,
+        web3,
+        activeTransactions,
+        setShowErrorModal,
+        setSearchLoading
+      );
     } else {
       console.log(`dodeljivanje nivoa ${i}`);
       const dummyComp = structuredClone(comp);
@@ -120,7 +126,13 @@ export const assignCompetences = async (
         dummyComp.competence.elements[key] = "NA";
       }
       console.log("dummy: ", dummyComp);
-      await assignCompetence(dummyComp, web3, activeTransactions);
+      await assignCompetence(
+        dummyComp,
+        web3,
+        activeTransactions,
+        setShowErrorModal,
+        setSearchLoading
+      );
     }
   }
   const interval = setInterval(async () => {
@@ -130,7 +142,7 @@ export const assignCompetences = async (
     console.log("setInterval");
     console.log("all finished: ", allFinished);
     console.log("has error: ", hasError);
-    if (allFinished) {
+    if (allFinished && typeof allFinished === "boolean") {
       clearInterval(interval);
       console.log("svi su prosli uzimamo query");
       window.location.reload();
@@ -139,13 +151,18 @@ export const assignCompetences = async (
     if (hasError) {
       setShowErrorModal(true);
       clearInterval(interval);
-      console.log("ima error uzimamo query");
       window.location.reload();
     }
   }, 2000);
 };
 
-async function assignCompetence(comp, web3, activeTransactions) {
+async function assignCompetence(
+  comp,
+  web3,
+  activeTransactions,
+  setShowErrorModal,
+  setSearchLoading
+) {
   console.log("assigncompetence");
   if (comp.competenceLevel && comp.metamaskAccount && web3) {
     const tokenURI = await uploadToIpfs(comp);
@@ -175,6 +192,9 @@ async function assignCompetence(comp, web3, activeTransactions) {
           console.log(error);
         }
       }, 3000);
+    } else {
+      setSearchLoading(false);
+      setShowErrorModal(true);
     }
   }
 }
