@@ -78,8 +78,7 @@ export const assignCompetences = async (
   allData,
   setSearchLoading,
   setShowErrorModal,
-  setDataToShow,
-  client
+  showWarning
 ) => {
   console.log("assignCompetences");
   const studentCompetences = allData.nfts.filter((data) => {
@@ -95,7 +94,18 @@ export const assignCompetences = async (
       (max, obj) => Math.max(max, obj.competenceLevel),
       -Infinity
     );
-    console.log("studentCompetences ima");
+    if (maxLevel === comp.competenceLevel) {
+      showWarning(
+        `This student already has competence level ${comp.competenceLevel}`
+      );
+      return;
+    }
+    if (maxLevel > comp.competenceLevel) {
+      showWarning(
+        `This student already has competence level higher than ${comp.competenceLevel}`
+      );
+      return;
+    }
   }
   setSearchLoading(true);
   for (let i = maxLevel + 1; i <= comp.competenceLevel; i++) {

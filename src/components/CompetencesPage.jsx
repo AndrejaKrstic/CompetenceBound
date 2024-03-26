@@ -23,6 +23,7 @@ function CompetencesPage() {
   const [searchLoading, setSearchLoading] = useState(false);
   const [dataToShow, setDataToShow] = useState();
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showWarningModal, setShowWarningModal] = useState(false);
   const [compSearchOptions, setCompSearchOptions] = useState();
   const [studentSearchOptions, setStudentSearchOptions] = useState();
   const [selectedCompetenceFilter, setSelectedCompetenceFilter] = useState();
@@ -30,6 +31,8 @@ function CompetencesPage() {
   const [searchActive, setSearchActive] = useState();
   const client = useApolloClient();
   const alertRef = useRef();
+  const warningRef = useRef();
+
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll(
       '[data-bs-togglic="tooltip"]'
@@ -205,11 +208,26 @@ function CompetencesPage() {
       );
       setTimeout(() => {
         setShowErrorModal(false);
-      }, 3000);
+      }, 5000);
     } else {
       alertRef.current.hideAlert();
     }
   }, [showErrorModal]);
+
+  function showWarning(warning) {
+    warningRef.current.showAlert(warning, "warning");
+    setShowWarningModal(true);
+  }
+
+  useEffect(() => {
+    if (showWarningModal) {
+      setTimeout(() => {
+        setShowWarningModal(false);
+      }, 5000);
+    } else {
+      warningRef.current.hideAlert();
+    }
+  }, [showWarningModal]);
 
   useEffect(() => {
     if (error) {
@@ -322,6 +340,7 @@ function CompetencesPage() {
           setShowErrorModal={setShowErrorModal}
           allData={dataToShow}
           setDataToShow={setDataToShow}
+          showWarning={showWarning}
         />
       )}
       {(loading || searchLoading) && (
@@ -330,6 +349,7 @@ function CompetencesPage() {
         </div>
       )}
       <Alert ref={alertRef} />
+      <Alert ref={warningRef} />
     </div>
   );
 }

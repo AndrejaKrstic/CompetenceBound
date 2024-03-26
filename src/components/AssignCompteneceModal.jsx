@@ -12,6 +12,7 @@ function AssignCompteneceModal({
   setShowErrorModal,
   allData,
   setDataToShow,
+  showWarning
 }) {
   const [competences, setCompetences] = useState([]);
   const [selectedComptenece, setSelectedCompetence] = useState();
@@ -101,8 +102,7 @@ function AssignCompteneceModal({
         allData,
         setSearchLoading,
         setShowErrorModal,
-        setDataToShow,
-        client
+        showWarning
       );
       clearForm();
     }
