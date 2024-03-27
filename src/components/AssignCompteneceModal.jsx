@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import comps from "../static/competences.json";
 import { assignCompetences } from "../controllers/AssignCompetenceController";
 import Web3 from "web3";
-import { useApolloClient } from "@apollo/client";
 
 const sepoliaRPCUrl =
   "https://sepolia.infura.io/v3/e2d17050f550446dad42f6bab853f289";
@@ -12,12 +11,11 @@ function AssignCompteneceModal({
   setShowErrorModal,
   allData,
   setDataToShow,
-  showWarning
+  showWarning,
 }) {
   const [competences, setCompetences] = useState([]);
   const [selectedComptenece, setSelectedCompetence] = useState();
   const [web3, setWeb3] = useState();
-  const client = useApolloClient();
 
   const [data, setData] = useState({
     name: "",
@@ -58,7 +56,6 @@ function AssignCompteneceModal({
 
   useEffect(() => {
     const web3Instance = new Web3(sepoliaRPCUrl);
-    console.log(web3Instance);
     setWeb3(web3Instance);
   }, []);
 
@@ -90,7 +87,6 @@ function AssignCompteneceModal({
     } else {
       level = Math.floor(level);
     }
-    console.log(level);
     setData({ ...data, competenceLevel: level });
   };
 
@@ -110,7 +106,6 @@ function AssignCompteneceModal({
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
     calculateCompetencelevel();
   };
 
@@ -121,7 +116,6 @@ function AssignCompteneceModal({
   const handleSelectChange = (e) => {
     const selectedComp = competences.find((obj) => obj.name === e.target.value);
     setSelectedCompetence(selectedComp);
-    console.log(selectedComp);
     let comp = data.competence;
     if (selectedComp) {
       comp = {
@@ -158,7 +152,7 @@ function AssignCompteneceModal({
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="exampleModalLabel">
-              Assign a competence
+              <b>Assign a competence</b>
             </h1>
             <button
               id="modal-close-button"
@@ -270,7 +264,10 @@ function AssignCompteneceModal({
                   ))}
                 </div>
               )}
-              <button type="submit" className="btn btn-primary">
+              <button
+                type="submit"
+                className="btn btn-primary comp-assign-button"
+              >
                 Assign
               </button>
             </form>

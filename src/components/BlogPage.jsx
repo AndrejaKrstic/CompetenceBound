@@ -20,7 +20,9 @@ function BlogPage() {
   };
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Blog</h1>
+      <h1 className="text-center mb-4">
+        <b>Blog</b>
+      </h1>
       {blogs.length && (
         <div className="row">
           {blogs.map((blog, i) => (

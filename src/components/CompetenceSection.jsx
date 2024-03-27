@@ -24,7 +24,7 @@ const CompetenceSection = ({ comp }) => {
         <h5>Elements:</h5>
         <ol>
           {elements.map((element, i) => (
-            <li key={i}>
+            <li key={i} className="mb-3">
               <b>Name:</b>
               <br />
               {element.name}

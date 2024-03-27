@@ -8,7 +8,9 @@ import CompetenceSection from "./CompetenceSection";
 function CompetencyModelPage() {
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Competency Model</h1>
+      <h1 className="text-center mb-4">
+        <b>Competency Model</b>
+      </h1>
       <div className="row">
         <div className="col-md-12">
           <div className="card mb-4">

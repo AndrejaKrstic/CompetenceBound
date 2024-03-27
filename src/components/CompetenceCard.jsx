@@ -15,17 +15,17 @@ function CompetenceCard({ nft, loading, error, id }) {
     }
   }, []);
   return (
-    <div className="col-md-6 col-lg-4 col-xl-3 col-xxl-3 col-6 mb-4">
+    <div className="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 mb-4">
       {compData && (
         <div
-          className="card competence-card"
+          className="card competence-card competence-card-body"
           data-bs-toggle="modal"
           data-bs-target={`#modal_${id}`}
         >
           <div className="card-body">
-            <h5 className="card-title text-center">{compData.name}</h5>
+            <h5 className="card-title competence-card-name">{compData.name}</h5>
             {isAdmin && (
-              <h6 className="text-center">
+              <h6>
                 Student: {compData.studentName} {compData.studentID}
               </h6>
             )}

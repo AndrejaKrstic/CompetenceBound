@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import style from "./LoginPage.module.css";
 import photo from "../images/MetaMask_Fox.svg.png";
 import { useAppContext } from "../AppContext";
@@ -19,7 +19,6 @@ const LoginPage = () => {
         const originalAddress = accounts[0];
         const web3 = new Web3(window.ethereum);
         const checksumAddress = web3.utils.toChecksumAddress(originalAddress);
-        console.log("Connected to Ethereum account: ", checksumAddress);
         setAccount(checksumAddress);
         logInUser(checksumAddress);
      
