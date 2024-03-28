@@ -57,3 +57,24 @@ body {
   background-color: #c3a278;
   color: black;
 }
+
+.competence-card-name {
+  font-weight: bold;
+}
+
+.competence-card-body {
+  transition: transform 0.3s ease-in-out;
+}
+
+.competence-card-body:hover {
+  transform: scale(1.1);
+}
+
+.comp-assign-button {
+  background-color: #ff8c00;
+  border: none;
+}
+
+.comp-assign-button:hover {
+  background-color: #a06c2e;
+}

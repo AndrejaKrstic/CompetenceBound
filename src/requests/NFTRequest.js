@@ -1,4 +1,3 @@
-import { useApolloClient } from "@apollo/client";
 import {
   GET_NFTS_BY_STUDENT_ADDRESS,
   GET_NFTS_BY_COMPETENCE_NAME,
@@ -44,7 +43,6 @@ export const getNFTsByCompetenceName = (
     .then(({ data }) => {
       setSearchLoading(false);
       setDataToShow(data);
-      console.log(data);
     })
     .catch((error) => {
       setSearchLoading(false);

@@ -23,6 +23,7 @@ function CompetencesPage() {
   const [searchLoading, setSearchLoading] = useState(false);
   const [dataToShow, setDataToShow] = useState();
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showWarningModal, setShowWarningModal] = useState(false);
   const [compSearchOptions, setCompSearchOptions] = useState();
   const [studentSearchOptions, setStudentSearchOptions] = useState();
   const [selectedCompetenceFilter, setSelectedCompetenceFilter] = useState();
@@ -30,6 +31,8 @@ function CompetencesPage() {
   const [searchActive, setSearchActive] = useState();
   const client = useApolloClient();
   const alertRef = useRef();
+  const warningRef = useRef();
+
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll(
       '[data-bs-togglic="tooltip"]'
@@ -161,10 +164,6 @@ function CompetencesPage() {
       const nfts = await fetchAllNftData(error, data);
       setCompSearchOptions([...new Set(nfts.map((obj) => obj.name))]);
       if (isAdmin) {
-        const uniqueStudentAdresses = [
-          ...new Set(nfts.map((obj) => obj.studentAddress)),
-        ];
-        console.log(uniqueStudentAdresses);
         const uniqueStudents = [];
         nfts.forEach((nft) => {
           const isUnique = !uniqueStudents.some(
@@ -194,7 +193,6 @@ function CompetencesPage() {
     if (dataToShow?.nfts.length) {
       assignSelectOptions();
     }
-    console.log(dataToShow?.nfts);
   }, [dataToShow]);
 
   useEffect(() => {
@@ -205,11 +203,26 @@ function CompetencesPage() {
       );
       setTimeout(() => {
         setShowErrorModal(false);
-      }, 3000);
+      }, 5000);
     } else {
       alertRef.current.hideAlert();
     }
   }, [showErrorModal]);
+
+  function showWarning(warning) {
+    warningRef.current.showAlert(warning, "warning");
+    setShowWarningModal(true);
+  }
+
+  useEffect(() => {
+    if (showWarningModal) {
+      setTimeout(() => {
+        setShowWarningModal(false);
+      }, 5000);
+    } else {
+      warningRef.current.hideAlert();
+    }
+  }, [showWarningModal]);
 
   useEffect(() => {
     if (error) {
@@ -219,7 +232,9 @@ function CompetencesPage() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Competences</h1>
+      <h1 className="text-center mb-4">
+        <b>Competences</b>
+      </h1>
       {isAdmin && (
         <div className="d-flex justify-content-end mb-3">
           <button
@@ -244,7 +259,7 @@ function CompetencesPage() {
                 }`}
               >
                 <label htmlFor="compSelect" className="form-label">
-                  Filter by Competence:
+                  <b>Filter by Competence:</b>
                 </label>
                 <select
                   id="compSelect"
@@ -266,7 +281,7 @@ function CompetencesPage() {
               {isAdmin && (
                 <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                   <label htmlFor="studentSelect" className="form-label">
-                    Filter by Student:
+                    <b>Filter by Student:</b>
                   </label>
                   <select
                     id="studentSelect"
@@ -322,6 +337,7 @@ function CompetencesPage() {
           setShowErrorModal={setShowErrorModal}
           allData={dataToShow}
           setDataToShow={setDataToShow}
+          showWarning={showWarning}
         />
       )}
       {(loading || searchLoading) && (
@@ -330,6 +346,7 @@ function CompetencesPage() {
         </div>
       )}
       <Alert ref={alertRef} />
+      <Alert ref={warningRef} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import style from "./HomePage.module.css";
+import image from "../images/homepage.webp";
 
 function HomePage() {
   return (
@@ -9,14 +10,17 @@ function HomePage() {
       </h1>
       <p className={`text-start mt-5 ms-4 ${style.homeDesc}`}>
         Discover a <b>transparent</b>, <b>decentralized</b>, and{" "}
-        <b>immutable</b> solution for managing gained competencies gained
-        through education process. <br />
-        With us, <b>authenticity</b> and <b>validity</b> are guaranteed, ensuring acquired
-        skills are recognized and celebrated with confidence.
+        <b>immutable</b> solution for managing gained competences gained through
+        education process. <br />
+        With us, <b>authenticity</b> and <b>validity</b> are guaranteed,
+        ensuring acquired skills are recognized and celebrated with confidence.
       </p>
+      <div className="text-center">
+        <img src={image} alt="homepage" style={{ width: "50%" }} />
+      </div>
       <hr className="divider mt-5 mb-4" />
       <div className="row mt-5">
-        <div className="col text-start">
+        <div className="col text-start mb-5">
           <h3>Get Started</h3>
           <div className={`mt-3 ${style.buttonContainer}`}>
             <a className={style.blogButton} href="/blog">

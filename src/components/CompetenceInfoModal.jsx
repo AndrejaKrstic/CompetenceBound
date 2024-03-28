@@ -50,6 +50,9 @@ function CompetenceInfoModal({ id, compData }) {
               <h6>
                 <b>Skills:</b>
               </h6>
+              {compData?.skills[Object.keys(compData.skills)[0]] === "NA" && (
+                <span>&#40;This NFT was assigned automatically&#41;</span>
+              )}
               <ul>
                 {Object.entries(compData.skills).map(([key, value]) => (
                   <li key={key}>
