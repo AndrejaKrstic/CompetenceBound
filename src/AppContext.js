@@ -11,7 +11,9 @@ const ContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     sessionStorage.getItem("eth_account")
   );
-  const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem("is_admin") === "true");
+  const [isAdmin, setIsAdmin] = useState(
+    sessionStorage.getItem("is_admin") === "true"
+  );
 
   const logInUser = (account) => {
     sessionStorage.setItem("eth_account", account);
